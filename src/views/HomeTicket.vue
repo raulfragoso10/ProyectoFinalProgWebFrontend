@@ -1,10 +1,12 @@
 <template>
   <div>
-    <h1>Categorias</h1>
-    <b-button variant="primary" to="/agregarCategoria">Agregar</b-button>
+    <h1>Tickets</h1>
 
-    <Table :items="categorias" :fields="campos" :busy="loading">
+    <b-button variant="primary" to="/agregarTicket">Agregar</b-button>
+
+    <Table :items="ticket" :fields="campos" :busy="loading">
       <template slot="actions" slot-scope="{ item }">
+        <b-button class="me-1" @click="onEditar(item)">Editar</b-button>
         <b-button @click="onEliminar(item)">Eliminar</b-button>
       </template>
     </Table>
@@ -15,7 +17,7 @@
 import Table from "../components/Table";
 import { mapState, mapActions } from "vuex";
 export default {
-  name: "HomeCategoria",
+  name: "HomeTicket",
   components: {
     Table,
   },
@@ -24,20 +26,40 @@ export default {
       campos: [
         { key: "id", label: "Clave" },
         { key: "nombre" },
+        {
+          key: "descripcion",
+          label: "Descripción",
+          formatter: (value) => {
+            return value || "-";
+          },
+        },
+        { key: "prioridad" },
+        { key: "personal" },        
+        { key: "categoria" },
+        { key: "estatus" },                
         { key: "actions", label: "Accion" },
       ],
     };
   },
   computed: {
-    ...mapState(["categorias", "loading"]),
+    ...mapState(["ticket", "loading"]),
   },
   methods: {
-    ...mapActions(["setCategorias", "eliminarCategoria"]),
+    ...mapActions(["setTicket", "eliminarTicket"]),
+    onEditar(item) {
+      console.log("Editar", item.item.id);
+      this.$router.push({
+        name: "EditarTicket",
+        params: {
+          id: item.item.id,
+        },
+      });
+    },
     onEliminar(item) {
       console.log("Eliminar", item.item.id);
       this.$bvModal
         .msgBoxConfirm("Esta opción no se puede deshacer.", {
-          title: "Eliminar Categoria",
+          title: "Eliminar Ticket",
           size: "sm",
           buttonSize: "sm",
           okVariant: "danger",
@@ -48,14 +70,14 @@ export default {
         })
         .then((value) => {
           if (value) {
-            this.eliminarCategoria({
+            this.eliminarTicket({
               id: item.item.id,
               onComplete: (response) => {
                 this.$notify({
                   type: "success",
                   title: response.data.mensaje,
                 });
-                setTimeout(() => this.setCategorias(), 1000);
+                setTimeout(() => this.setTicket(), 1000);
               },
             });
           }
@@ -66,7 +88,7 @@ export default {
     },
   },
   mounted() {
-    this.setCategorias();
+    this.setTicket();
   },
 };
 </script>

@@ -21,7 +21,7 @@
 import { mapActions } from "vuex";
 import Input from "../components/Input";
 export default {
-  name: "Agregar",
+  name: "AgregarCategoria",
   components: {
     Input,
   },
@@ -55,7 +55,7 @@ export default {
               title: response.data.mensaje,
             });
             this.$router.push({
-                name: 'Home'
+                name: 'HomeCategoria'
             })
           },
           onError: (error) => {
