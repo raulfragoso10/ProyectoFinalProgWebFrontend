@@ -53,10 +53,17 @@ export default {
               onComplete: (response) => {
                 this.$notify({
                   type: "success",
-                  title: response.data.mensaje,
+                  title: response.data.mensaje, 
                 });
                 setTimeout(() => this.setCategorias(), 1000);
               },
+            onError: (error) => {
+              console.log(error.response.data.mensaje);
+              this.$notify({
+                type: 'error', 
+                title: error.response.data.mensaje,
+              });
+            },              
             });
           }
         })

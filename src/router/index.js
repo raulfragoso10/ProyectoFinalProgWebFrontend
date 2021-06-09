@@ -7,6 +7,8 @@ import HomePersonal from '../views/HomePersonal.vue'
 import AgregarPersonal from '../views/AgregarPersonal.vue'
 import EditarPersonal from '../views/EditarPersonal.vue'
 import HomeTicket from '../views/HomeTicket.vue'
+import AgregarTicket from '../views/AgregarTicket.vue'
+import EditarTicket from '../views/EditarTicket.vue'
 
 Vue.use(VueRouter)
 
@@ -45,6 +47,16 @@ const routes = [
     path: '/homeTicket',
     name: 'HomeTicket',
     component: HomeTicket
+  },
+  {
+    path: '/agregarTicket',
+    name: 'AgregarTicket',
+    component: AgregarTicket
+  },
+  {
+    path: '/editarTicket',
+    name: 'EditarTicket',
+    component: EditarTicket
   }
 ]
 

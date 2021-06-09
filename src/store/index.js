@@ -9,6 +9,9 @@ export default new Vuex.Store({
     categorias: [],
     personal: [],
     ticket: [],
+    ticketFiltro: [],
+    selectCategoria: [],
+    personalConcatenado: [],
     loading: false
   },
   mutations: {
@@ -21,6 +24,21 @@ export default new Vuex.Store({
     SET_PERSONA1(state, persona1) {
       state.persona1 = persona1;
     },
+    SET_TICKET1(state, ticket1) {
+      state.ticket1 = ticket1;
+    },
+    SET_TICKETFILTRO(state, ticketFiltro) {
+      state.ticketFiltro = ticketFiltro;
+    },
+    SET_PERSONACONCATENADO(state, personalConcatenado) {
+      state.personalConcatenado = personalConcatenado;
+    },
+    SET_OBTENERCATEGORIA(state, obtenerCategoria) {
+      state.obtenerCategoria = obtenerCategoria;
+    },
+    SET_SELECTCATEGORIA(state, selectCategoria) {
+      state.selectCategoria = selectCategoria;
+    },    
     SET_TICKET(state, ticket) {
       state.ticket = ticket;
     },
@@ -36,9 +54,28 @@ export default new Vuex.Store({
         commit('SET_CATEGORIAS', response.data);
       })
       .finally(() => commit('SET_LOADING', false))
+    }, 
+    selectCategorias({commit}){
+      axios.get('http://localhost:3000/selectCategoria')
+      .then( response => {
+        commit('SET_SELECTCATEGORIA', response.data);
+      })
+      .finally(() => commit('SET_LOADING', false))
+    },
+    personalConcatenados({commit}){
+      axios.get('http://localhost:3000/personalConcatenado')
+      .then( response => {
+        commit('SET_PERSONACONCATENADO', response.data);
+      })
+      .finally(() => commit('SET_LOADING', false))
     },
     crearCategoria({commit}, {params, onComplete, onError}) {
       axios.post('http://localhost:3000/', params)
+      .then(onComplete)
+      .catch(onError)
+    },
+    crearTicket({commit}, {params, onComplete, onError}) {
+      axios.post('http://localhost:3000/ticket', params)
       .then(onComplete)
       .catch(onError)
     },
@@ -60,12 +97,10 @@ export default new Vuex.Store({
       axios.get('http://localhost:3000/ticket')
       .then( response => {
         commit('SET_TICKET', response.data);
-        console.log(response.data)
       })
       .finally(() => commit('SET_LOADING', false))
     },    
     crearPersonal({commit}, {params, onComplete, onError}) {
-      console.log(params)
       axios.post('http://localhost:3000/personal', params)
       .then(onComplete)
       .catch(onError)
@@ -75,6 +110,11 @@ export default new Vuex.Store({
       .then(onComplete)
       .catch(onError)
     },        
+    eliminarTicket({commit}, {id, onComplete, onError}){
+      axios.delete(`http://localhost:3000/ticket/${id}`)
+      .then(onComplete)
+      .catch(onError)
+    },            
     obtenerPersonal({commit}, {id, onComplete, onError}) {
       axios.get(`http://localhost:3000/personal/${id}`)
       .then( response => {
@@ -82,9 +122,37 @@ export default new Vuex.Store({
         onComplete(response)
       })
       .catch(onError)
-    },
+    },           
+    obtenerTicket({commit}, {id, onComplete, onError}) {
+      axios.get(`http://localhost:3000/ticket/${id}`)
+      .then( response => {
+        commit('SET_TICKET1', response.data.data);
+        onComplete(response)
+      })
+      .catch(onError)
+    },        
+    buscarTickets({commit}, {id, onComplete, onError}) {
+      axios.get(`http://localhost:3000/ticketFiltro/${id}`)
+      .then( response => {
+        commit('SET_TICKETFILTRO', response.data.data);
+        onComplete(response)
+      })
+      .catch(onError)
+    },    
     editarPersonal({commit}, {id, params, onComplete, onError} ) {
       axios.put(`http://localhost:3000/personal/${id}`, params)
+      .then(onComplete)
+      .catch(onError)
+    },
+    editarTicket({commit}, {id, params, onComplete, onError} ) {
+      console.log(id + " " + params)
+      axios.put(`http://localhost:3000/ticket/${id}`, params)
+      .then(onComplete)
+      .catch(onError)
+    },
+    cambiarEstatus({commit}, {id, params, onComplete, onError} ) {
+      console.log(id + " y " + params)
+      axios.put(`http://localhost:3000/cambiarEstatus/${id}`, params)
       .then(onComplete)
       .catch(onError)
     },    

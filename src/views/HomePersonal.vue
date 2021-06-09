@@ -83,6 +83,13 @@ export default {
                 });
                 setTimeout(() => this.setPersonal(), 1000);
               },
+            onError: (error) => {
+              console.log(error.response.data.mensaje);
+              this.$notify({
+                type: 'error',  
+                title: error.response.data.mensaje,
+              });
+            },              
             });
           }
         })
